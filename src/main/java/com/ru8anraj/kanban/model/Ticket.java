@@ -1,6 +1,5 @@
 package com.ru8anraj.kanban.model;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -67,7 +66,7 @@ public class Ticket {
 	private String assignedTo = null;
 
 	@JsonProperty("createdOn")
-	private LocalDate createdOn = null;
+	private String createdOn = null;
 
 	public Ticket id(Long id) {
 		this.id = id;
@@ -151,7 +150,7 @@ public class Ticket {
 		this.assignedTo = assignedTo;
 	}
 
-	public Ticket createdOn(LocalDate createdOn) {
+	public Ticket createdOn(String createdOn) {
 		this.createdOn = createdOn;
 		return this;
 	}
@@ -165,11 +164,11 @@ public class Ticket {
 
 	@Valid
 
-	public LocalDate getCreatedOn() {
+	public String getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(LocalDate createdOn) {
+	public void setCreatedOn(String createdOn) {
 		this.createdOn = createdOn;
 	}
 
