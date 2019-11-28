@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ru8anraj.kanban.model.Ticket;
+import com.ru8anraj.kanban.model.Ticket.StatusEnum;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +52,7 @@ public interface TicketApi {
 			@ApiResponse(code = 400, message = "Invalid status value") })
 	@RequestMapping(value = "/ticket/findByStatus", produces = { "application/json" }, method = RequestMethod.GET)
 	ResponseEntity<List<Ticket>> findTicketsByStatus(
-			@NotNull @ApiParam(value = "Status values that need to be considered for filter", required = true, allowableValues = "available, pending, sold") @Valid @RequestParam(value = "status", required = true) List<String> status);
+			@NotNull @ApiParam(value = "Status values that need to be considered for filter", required = true, allowableValues = "Backlog, Work In Progress, Completed") @Valid @RequestBody(required = true) List<StatusEnum> status);
 
 	@ApiOperation(value = "Find ticket by ID", nickname = "getTicketById", notes = "Returns a single ticket", response = Ticket.class, tags = {
 			"ticket", })

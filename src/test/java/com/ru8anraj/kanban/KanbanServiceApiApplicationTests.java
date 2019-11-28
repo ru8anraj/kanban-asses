@@ -1,13 +1,13 @@
 package com.ru8anraj.kanban;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class KanbanServiceApiApplicationTests {
+public class KanbanServiceApiApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
 	}
 
 }
