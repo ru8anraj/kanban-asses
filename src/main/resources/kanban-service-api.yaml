@@ -339,7 +339,6 @@ definitions:
         type: "string"
         description: "Ticket creation date"
         example: "2017-01-01"
-        format: "date"
   ApiResponse:
     type: "object"
     properties:

@@ -4,11 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.ru8anraj.kanban.model.Ticket.StatusEnum;
 
 @Entity
+@Table(name = "tickets")
 public class TicketEntity {
 
 	@Id

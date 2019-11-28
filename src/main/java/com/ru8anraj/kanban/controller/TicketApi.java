@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,16 +27,15 @@ public interface TicketApi {
 	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
 	@RequestMapping(value = "/ticket", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.POST)
-	ResponseEntity<Void> addTicket(
+	ResponseEntity<String> addTicket(
 			@ApiParam(value = "Ticket object that needs to be added to the kanban", required = true) @Valid @RequestBody Ticket body);
 
 	@ApiOperation(value = "Deletes a ticket", nickname = "deleteTicket", notes = "", tags = { "ticket", })
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied"),
 			@ApiResponse(code = 404, message = "Ticket not found") })
 	@RequestMapping(value = "/ticket/{ticketId}", produces = { "application/json" }, method = RequestMethod.DELETE)
-	ResponseEntity<Void> deleteTicket(
-			@ApiParam(value = "Ticket id to delete", required = true) @PathVariable("ticketId") Long ticketId,
-			@ApiParam(value = "") @RequestHeader(value = "api_key", required = false) String apiKey);
+	ResponseEntity<String> deleteTicket(
+			@ApiParam(value = "Ticket id to delete", required = true) @PathVariable("ticketId") Long ticketId);
 
 	@ApiOperation(value = "Finds all tickets", nickname = "findAllTickets", notes = "Fetches all the tickets from the DB", response = Ticket.class, responseContainer = "List", tags = {
 			"ticket", })
@@ -71,7 +69,7 @@ public interface TicketApi {
 			@ApiResponse(code = 405, message = "Validation exception") })
 	@RequestMapping(value = "/ticket/{ticketId}", produces = { "application/json" }, consumes = {
 			"application/json" }, method = RequestMethod.PUT)
-	ResponseEntity<Void> updateTicket(
+	ResponseEntity<String> updateTicket(
 			@ApiParam(value = "ID of ticket to return", required = true) @PathVariable("ticketId") Long ticketId,
 			@ApiParam(value = "Ticket object that needs to be added to the kanban", required = true) @Valid @RequestBody Ticket body);
 

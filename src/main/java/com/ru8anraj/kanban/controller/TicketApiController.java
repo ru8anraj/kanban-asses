@@ -1,6 +1,5 @@
 package com.ru8anraj.kanban.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ru8anraj.kanban.entity.TicketEntity;
 import com.ru8anraj.kanban.model.Ticket;
-import com.ru8anraj.kanban.model.Ticket.StatusEnum;
 import com.ru8anraj.kanban.service.TicketService;
 
 import io.swagger.annotations.ApiParam;
@@ -40,17 +36,22 @@ public class TicketApiController implements TicketApi {
 		this.request = request;
 	}
 
-	public ResponseEntity<Void> addTicket(
+	public ResponseEntity<String> addTicket(
 			@ApiParam(value = "Ticket object that needs to be added to the kanban", required = true) @Valid @RequestBody Ticket body) {
-		ticketService.addTicket(body);
-		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+		if(ticketService.addTicket(body)) {
+			return new ResponseEntity<String>("Successfully added the ticket!", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
-	public ResponseEntity<Void> deleteTicket(
-			@ApiParam(value = "Ticket id to delete", required = true) @PathVariable("ticketId") Long ticketId,
-			@ApiParam(value = "") @RequestHeader(value = "api_key", required = false) String apiKey) {
-		String accept = request.getHeader("Accept");
-		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+	public ResponseEntity<String> deleteTicket(
+			@ApiParam(value = "Ticket id to delete", required = true) @PathVariable("ticketId") Long ticketId) {
+		if(ticketService.deleteTicket(ticketId)) {
+			return new ResponseEntity<String>("Successfully deleted the ticket!", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	public ResponseEntity<List<Ticket>> findAllTickets() {
@@ -58,7 +59,11 @@ public class TicketApiController implements TicketApi {
 		if (accept != null && accept.contains("application/json")) {
 			try {
 				List<Ticket> ticketsList = ticketService.getAllTicket();
-				return new ResponseEntity<List<Ticket>>(ticketsList, HttpStatus.OK);
+				if(ticketsList.size() == 0) {
+					return new ResponseEntity<List<Ticket>>(ticketsList, HttpStatus.NO_CONTENT);
+				} else {
+					return new ResponseEntity<List<Ticket>>(ticketsList, HttpStatus.OK);
+				}
 			} catch (Exception e) {
 				log.error("Couldn't serialize response for content type application/json", e);
 				return new ResponseEntity<List<Ticket>>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,15 +78,12 @@ public class TicketApiController implements TicketApi {
 		String accept = request.getHeader("Accept");
 		if (accept != null && accept.contains("application/json")) {
 			try {
-				List<Ticket> ticketsList = new ArrayList<Ticket>();
-				Ticket ticket = new Ticket();
-				ticket.setId(3456779L);
-				ticket.setTitle("New Ticket");
-				ticket.setCreatedOn("27-11-2019");
-				ticket.setAssignedTo("Rubanraj");
-				ticket.setStatus(StatusEnum.BACKLOG);
-				ticketsList.add(ticket);
-				return new ResponseEntity<List<Ticket>>(ticketsList, HttpStatus.OK);
+				List<Ticket> ticketsList = ticketService.getAllTicketByStatus(status);
+				if(ticketsList.size() == 0) {
+					return new ResponseEntity<List<Ticket>>(ticketsList, HttpStatus.NO_CONTENT);
+				} else {
+					return new ResponseEntity<List<Ticket>>(ticketsList, HttpStatus.OK);
+				}
 			} catch (Exception e) {
 				log.error("Couldn't serialize response for content type application/json", e);
 				return new ResponseEntity<List<Ticket>>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,12 +98,7 @@ public class TicketApiController implements TicketApi {
 		String accept = request.getHeader("Accept");
 		if (accept != null && accept.contains("application/json")) {
 			try {
-				Ticket ticket = new Ticket();
-				ticket.setId(3456779L);
-				ticket.setTitle("New Ticket");
-				ticket.setCreatedOn("27-11-2019");
-				ticket.setAssignedTo("Rubanraj");
-				ticket.setStatus(StatusEnum.BACKLOG);
+				Ticket ticket = ticketService.getAllTicketById(ticketId);
 				return new ResponseEntity<Ticket>(ticket, HttpStatus.OK);
 			} catch (Exception e) {
 				log.error("Couldn't serialize response for content type application/json", e);
@@ -112,11 +109,14 @@ public class TicketApiController implements TicketApi {
 		return new ResponseEntity<Ticket>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
-	public ResponseEntity<Void> updateTicket(
+	public ResponseEntity<String> updateTicket(
 			@ApiParam(value = "ID of ticket to return", required = true) @PathVariable("ticketId") Long ticketId,
 			@ApiParam(value = "Ticket object that needs to be added to the kanban", required = true) @Valid @RequestBody Ticket body) {
-		String accept = request.getHeader("Accept");
-		return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+		if(ticketService.updateTicket(ticketId, body)) {
+			return new ResponseEntity<String>("Successfully added the ticket!", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
