@@ -3,12 +3,12 @@ package com.ru8anraj.kanban.service;
 import static com.ru8anraj.kanban.model.Ticket.StatusEnum.BACKLOG;
 import static com.ru8anraj.kanban.model.Ticket.StatusEnum.COMPLETED;
 import static com.ru8anraj.kanban.model.Ticket.StatusEnum.WORK_IN_PROGRESS;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -104,11 +104,11 @@ public class TicketServiceTest {
 		ticketService.addTicket(ticket);
 	}
 
-//	@Test(expected = Exception.class)
-//	public void testExceptionHandlingDeleteTicket() throws Exception {
-//		when(ticketRepository.deleteById(ticketId)).thenThrow(new Exception());
-//		ticketService.deleteTicket(ticketId);
-//	}
+	@Test(expected = Exception.class)
+	public void testExceptionHandlingDeleteTicket() throws Exception {
+		doThrow(new Exception()).when(ticketRepository).deleteById(ticketId);
+		ticketService.deleteTicket(ticketId);
+	}
 
 	@Test(expected = Exception.class)
 	public void testExceptionHandlingGetTickets() throws Exception {
