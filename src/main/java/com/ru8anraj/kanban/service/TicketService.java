@@ -23,15 +23,15 @@ import com.ru8anraj.kanban.repository.TicketRepository;
 @Service
 @Transactional
 public class TicketService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(TicketApiController.class);
-	
+
 	@Autowired
 	private TicketRepository ticketRepository;
 
 	public boolean addTicket(@Valid Ticket body) {
-		if (body == null) { 
-			throw new RuntimeException ("Data passed cannot be null");
+		if (body == null) {
+			throw new RuntimeException("Data passed cannot be null");
 		}
 		try {
 			TicketEntity ticketEntity = new TicketEntity();
@@ -43,7 +43,7 @@ public class TicketService {
 			return false;
 		}
 	}
-	
+
 	public List<Ticket> getAllTicket() {
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		try {
@@ -52,11 +52,11 @@ public class TicketService {
 				BeanUtils.copyProperties(ticket, ticketModel);
 				tickets.add(ticketModel);
 			});
-	        return tickets;
+			return tickets;
 		} catch (Exception e) {
 			log.error("Error in fetching tickets from DB!", e);
 			return tickets;
-		}	
+		}
 	}
 
 	public boolean deleteTicket(Long ticketId) {
@@ -72,14 +72,14 @@ public class TicketService {
 	public List<Ticket> getAllTicketByStatus(@NotNull @Valid List<StatusEnum> status) {
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		try {
-			if (status.size() != 0 && status.size() == 1){
+			if (status.size() != 0 && status.size() == 1) {
 				ticketRepository.findAllWithStatus(status.get(0)).forEach(ticket -> {
 					Ticket ticketModel = new Ticket();
 					BeanUtils.copyProperties(ticket, ticketModel);
 					tickets.add(ticketModel);
 				});
 			}
-			
+
 			if (status.size() != 0 && status.size() == 2) {
 				ticketRepository.findAllWithStatus(status.get(0), status.get(1)).forEach(ticket -> {
 					Ticket ticketModel = new Ticket();
@@ -106,8 +106,8 @@ public class TicketService {
 		try {
 			Optional<TicketEntity> ticketEntity = ticketRepository.findById(ticketId);
 			TicketEntity entity = ticketEntity.get();
-			if ( entity == null ) {
-				log.error("Couldn't find the ticket in the DB with id {}!",ticketId);
+			if (entity == null) {
+				log.error("Couldn't find the ticket in the DB with id {}!", ticketId);
 				return null;
 			}
 			BeanUtils.copyProperties(entity, ticket);
@@ -118,20 +118,25 @@ public class TicketService {
 		}
 	}
 
-	
 	public boolean updateTicket(Long ticketId, @Valid Ticket body) {
+		Optional<TicketEntity> ticketEntity = null;
 		try {
-			Optional<TicketEntity> ticketEntity = ticketRepository.findById(ticketId);
+			try {
+				ticketEntity = ticketRepository.findById(ticketId);
+			} catch (Exception e) {
+				log.error("Couldn't update the ticket in the DB!", ticketId, e);
+				return false;
+			}
 			TicketEntity entity = ticketEntity.get();
-			if ( entity == null ) {
-				log.error("Couldn't find the ticket in the DB with id {}!",ticketId);
+			if (entity == null) {
+				log.error("Couldn't find the ticket in the DB with id {}!", ticketId);
 				return false;
 			}
 			BeanUtils.copyProperties(body, entity, "id");
 			ticketRepository.save(entity);
 			return true;
 		} catch (Exception e) {
-			log.error("Couldn't update the ticket in the DB!",ticketId, e);
+			log.error("Couldn't update the ticket in the DB!", ticketId, e);
 			return false;
 		}
 	}
