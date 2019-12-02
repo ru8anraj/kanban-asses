@@ -1,29 +1,33 @@
-KANBAN-SERVICE-API
--
+<h1>KANBAN-SERVICE-API</h1>
+
 This service provides APIs to manage your tickets in the Kanban Board.
 
-This service exposes 6 endpoints for managing the kanban board
-    - POST - /ticket
-    - GET - /ticket
-    - GET - /ticket/{ticketId}
-    - GET - /ticket/findByStatus
-    - DELETE - /ticket/{ticketId}
-    - PUT - /ticket/{ticketId}
+<h4>This service exposes 6 endpoints for managing the kanban board</h4>
+    <ul>
+    <li>POST - /ticket</li>
+    <li>GET - /ticket</li>
+    <li>GET - /ticket/{ticketId}</li>
+    <li>GET - /ticket/findByStatus</li>
+    <li>DELETE - /ticket/{ticketId}</li>
+    <li>PUT - /ticket/{ticketId}</li>
+    </ul>
 
-
-Stack used for developement
-    - SpringBoot
-    - Swagger (API Design and Definition)
-    - H2 (In-Memory DB)
-    - Docker
+<h4>Stack used for developement</h4>
+    <ul>
+    <li>SpringBoot</li>
+    <li>Swagger (API Design and Definition)</li>
+    <li>H2 (In-Memory DB)</li>
+    <li>Docker</li>
+    </ul>
     
-Pre-Requisits
+<h4>Pre-Requisits</h4>
     - Docker should be installed for running the application
     
-Steps to run the service
-1. Go to the project directory
-2. Open terminal
-3. Command >> mvn clean install
-4. Command >> docker images (to find the image id)
-5. Command >> docker run -p 7071:7071 {imageId}
-6. Now you can access the service through localhost:7071 
+<h4>Steps to run the service</h4>
+    <ol>
+    <li>Go to the project directory</li>
+    <li>Open terminal</li>
+    <li>Command >> mvn clean install</li>
+    <li>Command >> docker images (to find the image id)</li>
+    <li>Command >> docker run -p 7071:7071 {imageId}</li>
+    <li>Now you can access the service through localhost:7071 </li>
